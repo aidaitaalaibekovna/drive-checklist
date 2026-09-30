@@ -232,53 +232,53 @@
     <button type="button" class="geo-action" onclick="fetchGeo()">Обновить</button>
   </div>
 
-  <!-- УТРЕННИЙ БЛОК -->
+  <!-- УТРЕННИЙ БЛОК (по умолчанию все переключатели на "Нет") -->
   <div id="morning-tasks">
     <div class="task-item">
       <span class="task-name">1. Мышка и гарнитура работают</span>
       <div class="switch-group" data-id="m1">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">2. AmoCRM открыта, свой аккаунт</span>
       <div class="switch-group" data-id="m2">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">3. Sipuni запущен, своя линия</span>
       <div class="switch-group" data-id="m3">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">4. Входящие и исходящие звонки доступны</span>
       <div class="switch-group" data-id="m4">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">5. Wazzup сообщения доходят</span>
       <div class="switch-group" data-id="m5">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">6. Кабинет проветрен и освещен, музыка включена</span>
       <div class="switch-group" data-id="m6">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
   </div>
 
-  <!-- ВЕЧЕРНИЙ БЛОК -->
+  <!-- ВЕЧЕРНИЙ БЛОК (по умолчанию все переключатели на "Нет") -->
   <div id="evening-tasks" style="display: none;">
     <div class="section-tag">Аренда автопарка</div>
     <div class="kpi-grid">
@@ -307,50 +307,50 @@
     <div class="task-item">
       <span class="task-name">1. Заявки все обработаны</span>
       <div class="switch-group" data-id="e1">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">2. Задачи выполнены</span>
       <div class="switch-group" data-id="e2">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">3. Отчет заполнен</span>
       <div class="switch-group" data-id="e3">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">4. ПК отключен</span>
       <div class="switch-group" data-id="e4">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">5. Окна закрыты</span>
       <div class="switch-group" data-id="e5">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">6. Свет выключен</span>
       <div class="switch-group" data-id="e6">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
       <span class="task-name">7. Сигнализация поставлена-дверь закрыта</span>
       <div class="switch-group" data-id="e7">
-        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
-        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn active-no" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
   </div>
