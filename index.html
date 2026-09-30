@@ -6,22 +6,23 @@
   <title>Drive Taxi — Фиксация смены</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; transition: all 0.2s ease; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     
     body {
-      background-color: #e0e5ec;
+      background: #e8ecf2;
       margin: 0;
-      padding: 16px;
-      color: #334155;
+      padding: 20px 12px;
+      color: #2d3748;
       display: flex;
       justify-content: center;
+      min-height: 100vh;
     }
     
-    .neu-container {
-      background: #e0e5ec;
-      border-radius: 24px;
-      padding: 22px;
-      box-shadow: 9px 9px 18px #bec3c9, -9px -9px 18px #ffffff;
+    .neu-card {
+      background: #e8ecf2;
+      border-radius: 28px;
+      padding: 24px 20px;
+      box-shadow: 12px 12px 24px #c5cbd5, -12px -12px 24px #ffffff;
       max-width: 440px;
       width: 100%;
     }
@@ -30,141 +31,162 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
-    .header-title { font-size: 20px; font-weight: 800; color: #1e293b; }
+    .brand-title {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #1a202c;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     
     .neu-badge {
       font-size: 11px;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 12px;
-      background: #e0e5ec;
-      box-shadow: inset 3px 3px 6px #bec3c9, inset -3px -3px 6px #ffffff;
-      color: #475569;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #e8ecf2;
+      box-shadow: inset 3px 3px 6px #c5cbd5, inset -3px -3px 6px #ffffff;
+      color: #4a5568;
     }
 
-    .form-group { margin-bottom: 14px; }
-    label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #475569; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 12px; font-weight: 800; margin-bottom: 8px; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; }
     
     select, input[type="number"] {
       width: 100%;
-      padding: 10px 14px;
+      padding: 12px 16px;
       border: none;
-      border-radius: 12px;
-      background: #e0e5ec;
-      box-shadow: inset 3px 3px 6px #bec3c9, inset -3px -3px 6px #ffffff;
+      border-radius: 16px;
+      background: #e8ecf2;
+      box-shadow: inset 4px 4px 8px #c5cbd5, inset -4px -4px 8px #ffffff;
       font-size: 14px;
+      font-weight: 600;
       outline: none;
-      color: #1e293b;
+      color: #1a202c;
     }
 
-    .neu-row {
-      background: #e0e5ec;
-      border-radius: 14px;
-      padding: 10px 12px;
-      margin-bottom: 10px;
-      box-shadow: 4px 4px 8px #bec3c9, -4px -4px 8px #ffffff;
+    .neu-task-row {
+      background: #e8ecf2;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      box-shadow: 5px 5px 10px #c5cbd5, -5px -5px 10px #ffffff;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
-    .row-text { font-size: 13px; font-weight: 600; color: #334155; max-width: 72%; line-height: 1.3; }
+    .task-label { font-size: 13px; font-weight: 600; color: #2d3748; line-height: 1.35; }
 
-    .toggle-group { display: flex; gap: 6px; }
+    .toggle-group { display: flex; gap: 8px; flex-shrink: 0; }
     .toggle-btn {
       border: none;
-      background: #e0e5ec;
-      padding: 6px 12px;
+      background: #e8ecf2;
+      padding: 8px 14px;
       font-size: 12px;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
-      font-weight: 700;
-      color: #64748b;
-      box-shadow: 3px 3px 6px #bec3c9, -3px -3px 6px #ffffff;
+      font-weight: 800;
+      color: #718096;
+      box-shadow: 4px 4px 8px #c5cbd5, -4px -4px 8px #ffffff;
+      transition: all 0.15s ease;
     }
     .toggle-btn.active-yes {
       background: #10b981;
       color: #ffffff;
-      box-shadow: inset 2px 2px 5px #059669, inset -2px -2px 5px #34d399;
+      box-shadow: inset 3px 3px 6px #047857, inset -3px -3px 6px #34d399;
     }
     .toggle-btn.active-no {
       background: #ef4444;
       color: #ffffff;
-      box-shadow: inset 2px 2px 5px #b91c1c, inset -2px -2px 5px #f87171;
+      box-shadow: inset 3px 3px 6px #b91c1c, inset -3px -3px 6px #f87171;
     }
 
-    .section-title {
-      font-size: 13px;
-      font-weight: 800;
+    .section-badge {
+      font-size: 12px;
+      font-weight: 900;
       text-transform: uppercase;
-      margin: 14px 0 6px 0;
-      color: #2563eb;
+      margin: 16px 0 8px 0;
+      color: #3b82f6;
+      letter-spacing: 0.5px;
     }
-    .num-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .num-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
     .num-card {
-      background: #e0e5ec;
-      padding: 10px;
-      border-radius: 12px;
-      box-shadow: 4px 4px 8px #bec3c9, -4px -4px 8px #ffffff;
+      background: #e8ecf2;
+      padding: 12px;
+      border-radius: 16px;
+      box-shadow: 5px 5px 10px #c5cbd5, -5px -5px 10px #ffffff;
     }
-    .num-card label { font-size: 11px; margin-bottom: 4px; }
+    .num-card label { font-size: 11px; margin-bottom: 6px; }
 
-    .geo-box {
-      margin-bottom: 14px;
-      padding: 8px 12px;
-      border-radius: 10px;
+    .geo-panel {
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      border-radius: 14px;
       font-size: 11px;
-      color: #64748b;
-      box-shadow: inset 2px 2px 5px #bec3c9, inset -2px -2px 5px #ffffff;
+      color: #4a5568;
+      box-shadow: inset 3px 3px 6px #c5cbd5, inset -3px -3px 6px #ffffff;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .geo-btn {
-      background: #e0e5ec;
+      background: #e8ecf2;
       border: none;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 10px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
       font-weight: 700;
       color: #2563eb;
       cursor: pointer;
-      box-shadow: 2px 2px 4px #bec3c9, -2px -2px 4px #ffffff;
+      box-shadow: 3px 3px 6px #c5cbd5, -3px -3px 6px #ffffff;
+    }
+    .geo-btn:active {
+      box-shadow: inset 2px 2px 4px #c5cbd5, inset -2px -2px 4px #ffffff;
     }
 
-    .neu-btn-submit {
+    .btn-create {
       width: 100%;
-      padding: 14px;
+      padding: 16px;
       border: none;
-      border-radius: 14px;
+      border-radius: 18px;
       font-size: 15px;
       font-weight: 800;
       cursor: pointer;
       background: #2563eb;
       color: #ffffff;
-      box-shadow: 4px 4px 10px #bec3c9, -4px -4px 10px #ffffff;
-      margin-top: 14px;
+      box-shadow: 6px 6px 14px #b8c1cc, -6px -6px 14px #ffffff;
+      margin-top: 16px;
+      transition: all 0.2s ease;
     }
+    .btn-create:active {
+      box-shadow: inset 4px 4px 8px #1d4ed8, inset -4px -4px 8px #3b82f6;
+    }
+    
     .btn-whatsapp {
       background: #25D366;
       display: none;
-      margin-top: 12px;
+      margin-top: 14px;
     }
-    #receipt-container { margin-top: 20px; display: none; text-align: center; }
-    #receipt-img { width: 100%; border-radius: 16px; margin-bottom: 10px; }
+
+    #receipt-container { margin-top: 24px; display: none; text-align: center; }
+    #receipt-img { width: 100%; border-radius: 22px; margin-bottom: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
   </style>
 </head>
 <body>
 
-<div class="neu-container" id="main-app">
+<div class="neu-card">
   <div class="header-box">
-    <div class="header-title">🚖 Drive Taxi</div>
+    <div class="brand-title">🚖 DRIVE TAXI</div>
     <div class="neu-badge" id="live-time">--:--</div>
   </div>
 
   <div class="form-group">
-    <label>Сотрудник</label>
+    <label>Сотрудник смены</label>
     <select id="emp-select">
       <option value="Айгуль">Айгуль</option>
       <option value="Нурай">Нурай</option>
@@ -173,50 +195,50 @@
   </div>
 
   <div class="form-group">
-    <label>Смена</label>
+    <label>Режим смены</label>
     <select id="shift-select" onchange="toggleShift()">
-      <option value="morning">☀️️ Утренняя смена</option>
+      <option value="morning">☀️ Утренняя смена</option>
       <option value="evening">🌙 Вечерняя смена</option>
     </select>
   </div>
 
-  <div class="geo-box">
-    <span id="geo-status-text">📍 Гео: ожидание...</span>
-    <button type="button" class="geo-btn" onclick="requestGeo()">Обновить гео</button>
+  <div class="geo-panel">
+    <span id="geo-status-text">📍 Гео ПК: определение...</span>
+    <button type="button" class="geo-btn" onclick="requestGeo()">Обновить</button>
   </div>
 
   <!-- УТРЕННИЙ БЛОК -->
   <div id="morning-block">
-    <div class="neu-row">
-      <div class="row-text">1. Мышка и гарнитура работают</div>
+    <div class="neu-task-row">
+      <div class="task-label">1. Мышка и гарнитура работают</div>
       <div class="toggle-group" data-id="m1">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
       </div>
     </div>
-    <div class="neu-row">
-      <div class="row-text">2. AmoCRM открыта, свой аккаунт</div>
+    <div class="neu-task-row">
+      <div class="task-label">2. AmoCRM открыта, свой аккаунт</div>
       <div class="toggle-group" data-id="m2">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
       </div>
     </div>
-    <div class="neu-row">
-      <div class="row-text">3. Sipuni запущен, своя линия</div>
+    <div class="neu-task-row">
+      <div class="task-label">3. Sipuni запущен, своя линия</div>
       <div class="toggle-group" data-id="m3">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
       </div>
     </div>
-    <div class="neu-row">
-      <div class="row-text">4. Входящие и исходящие звонки доступны</div>
+    <div class="neu-task-row">
+      <div class="task-label">4. Входящие и исходящие звонки доступны</div>
       <div class="toggle-group" data-id="m4">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
       </div>
     </div>
-    <div class="neu-row">
-      <div class="row-text">5. Вчерашние заявки до закрытия смены обработаны</div>
+    <div class="neu-task-row">
+      <div class="task-label">5. Вчерашние заявки до закрытия смены обработаны</div>
       <div class="toggle-group" data-id="m5">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
@@ -226,7 +248,7 @@
 
   <!-- ВЕЧЕРНИЙ БЛОК -->
   <div id="evening-block" style="display: none;">
-    <div class="section-title">Аренда автопарка</div>
+    <div class="section-badge">Аренда автопарка</div>
     <div class="num-grid">
       <div class="num-card">
         <label>Поступило заявок</label>
@@ -238,7 +260,7 @@
       </div>
     </div>
 
-    <div class="section-title">Подключашка</div>
+    <div class="section-badge">Подключашка</div>
     <div class="num-grid">
       <div class="num-card">
         <label>Поступило заявок</label>
@@ -250,29 +272,29 @@
       </div>
     </div>
 
-    <div class="neu-row">
-      <div class="row-text">1. Отчет заполнен</div>
+    <div class="neu-task-row">
+      <div class="task-label">1. Отчет заполнен</div>
       <div class="toggle-group" data-id="e1">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
       </div>
     </div>
-    <div class="neu-row">
-      <div class="row-text">2. ПК выключены</div>
+    <div class="neu-task-row">
+      <div class="task-label">2. ПК выключены</div>
       <div class="toggle-group" data-id="e2">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
       </div>
     </div>
-    <div class="neu-row">
-      <div class="row-text">3. Окна закрыты</div>
+    <div class="neu-task-row">
+      <div class="task-label">3. Окна закрыты</div>
       <div class="toggle-group" data-id="e3">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
       </div>
     </div>
-    <div class="neu-row">
-      <div class="row-text">4. Свет выключен</div>
+    <div class="neu-task-row">
+      <div class="task-label">4. Свет выключен</div>
       <div class="toggle-group" data-id="e4">
         <button type="button" class="toggle-btn active-yes" onclick="setToggle(this, true)">Да</button>
         <button type="button" class="toggle-btn" onclick="setToggle(this, false)">Нет</button>
@@ -280,22 +302,44 @@
     </div>
   </div>
 
-  <button class="neu-btn-submit" onclick="renderReceipt()">Сформировать квитанцию</button>
+  <button class="btn-create" onclick="renderReceipt()">Сформировать квитанцию</button>
 
   <div id="receipt-container">
     <img id="receipt-img" alt="Квитанция">
-    <button class="neu-btn-submit btn-whatsapp" id="btn-share" onclick="shareWhatsApp()">Поделиться в WhatsApp</button>
+    <button class="btn-create btn-whatsapp" id="btn-share" onclick="shareWhatsApp()">Поделиться в WhatsApp</button>
   </div>
 </div>
 
 <script>
-  const EMP_PALETTES = {
-    'Айгуль': { bg: '#1e1b4b', cardBg: '#2e1065', accent: '#c084fc', text: '#ffffff' },
-    'Нурай':  { bg: '#064e3b', cardBg: '#065f46', accent: '#6ee7b7', text: '#ffffff' },
-    'Дина':   { bg: '#4c0519', cardBg: '#831843', accent: '#fda4af', text: '#ffffff' }
+  // Индивидуальные темы для рендера квитанции в Neo-стиле
+  const EMP_THEMES = {
+    'Айгуль': {
+      bg: '#252042',
+      inner: '#2e2752',
+      accent: '#c084fc',
+      text: '#ffffff',
+      shadowDark: '#17142b',
+      shadowLight: '#393066'
+    },
+    'Нурай': {
+      bg: '#14382d',
+      inner: '#194739',
+      accent: '#34d399',
+      text: '#ffffff',
+      shadowDark: '#0c241d',
+      shadowLight: '#215c4a'
+    },
+    'Дина': {
+      bg: '#3d1d2b',
+      inner: '#4d2437',
+      accent: '#fb7185',
+      text: '#ffffff',
+      shadowDark: '#26121b',
+      shadowLight: '#612e46'
+    }
   };
 
-  let geoUrl = 'Координаты не переданы';
+  let geoUrl = 'Координаты не зафиксированы';
 
   function updateClock() {
     const d = new Date();
@@ -312,10 +356,10 @@
           const lat = pos.coords.latitude.toFixed(5);
           const lon = pos.coords.longitude.toFixed(5);
           geoUrl = `https://yandex.kz/maps/?pt=${lon},${lat}&z=17`;
-          document.getElementById('geo-status-text').innerText = `📍 Координаты: ${lat}, ${lon}`;
+          document.getElementById('geo-status-text').innerText = `📍 Зафиксировано: ${lat}, ${lon}`;
         },
         (err) => {
-          document.getElementById('geo-status-text').innerText = '⚠️️ Гео отключено в браузере';
+          document.getElementById('geo-status-text').innerText = '⚠ Доступ к гео заблокирован';
         },
         { enableHighAccuracy: true, timeout: 6000 }
       );
@@ -329,8 +373,8 @@
     btn.classList.add(isYes ? 'active-yes' : 'active-no');
   }
 
-  // Возвращает ТОЛЬКО значок галочки или крестика (без слов ДА/НЕТ)
-  function getVal(id) {
+  // Строго иконка ✅ или ❌ (никаких слов Да/Нет)
+  function getIconOnly(id) {
     const group = document.querySelector(`.toggle-group[data-id="${id}"]`);
     return group.querySelector('.active-yes') ? '✅' : '❌';
   }
@@ -346,91 +390,81 @@
   function renderReceipt() {
     const emp = document.getElementById('emp-select').value;
     const shift = document.getElementById('shift-select').value;
-    const theme = EMP_PALETTES[emp];
+    const theme = EMP_THEMES[emp];
     const now = new Date();
     const dateStr = now.toLocaleDateString('ru-RU');
     const timeStr = now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
 
-    let bodyHtml = '';
+    let itemsHtml = '';
 
     if (shift === 'morning') {
-      bodyHtml = `
-        <div style="background:${theme.cardBg}; padding:12px; border-radius:10px; font-size:12px; line-height:1.8;">
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding-bottom:3px;">
-            <span>1. Мышка и гарнитура:</span> <b style="font-size:14px;">${getVal('m1')}</b>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
-            <span>2. AmoCRM свой аккаунт:</span> <b style="font-size:14px;">${getVal('m2')}</b>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
-            <span>3. Sipuni своя линия:</span> <b style="font-size:14px;">${getVal('m3')}</b>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
-            <span>4. Входящие/исходящие звонки:</span> <b style="font-size:14px;">${getVal('m4')}</b>
-          </div>
-          <div style="display:flex; justify-content:space-between; padding-top:3px;">
-            <span>5. Вчерашние заявки обработаны:</span> <b style="font-size:14px;">${getVal('m5')}</b>
-          </div>
+      const tasks = [
+        '1. Мышка и гарнитура',
+        '2. AmoCRM свой аккаунт',
+        '3. Sipuni своя линия',
+        '4. Входящие/исходящие звонки',
+        '5. Вчерашние заявки обработаны'
+      ];
+      const ids = ['m1', 'm2', 'm3', 'm4', 'm5'];
+      
+      itemsHtml = tasks.map((t, idx) => `
+        <div style="background:${theme.inner}; padding:10px 14px; border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; box-shadow: inset 2px 2px 5px ${theme.shadowDark}, inset -2px -2px 5px ${theme.shadowLight};">
+          <span style="font-size:12px; font-weight:600; color:#e2e8f0;">${t}</span>
+          <span style="font-size:16px;">${getIconOnly(ids[idx])}</span>
         </div>
-      `;
+      `).join('');
     } else {
       const rIn = document.getElementById('ev-rent-in').value || '0';
       const rDone = document.getElementById('ev-rent-done').value || '0';
       const regIn = document.getElementById('ev-reg-in').value || '0';
       const regDone = document.getElementById('ev-reg-online').value || '0';
 
-      bodyHtml = `
-        <div style="background:${theme.cardBg}; padding:10px 12px; border-radius:10px; font-size:12px; margin-bottom:8px;">
-          <div style="color:${theme.accent}; font-weight:bold; margin-bottom:4px;">АРЕНДА АВТОПАРКА:</div>
-          <div>Поступило заявок: <b>${rIn}</b> | Взяли в аренду: <b>${rDone}</b></div>
-          <div style="color:${theme.accent}; font-weight:bold; margin:6px 0 4px 0;">ПОДКЛЮЧАШКА:</div>
-          <div>Поступило заявок: <b>${regIn}</b> | Вышли на линию: <b>${regDone}</b></div>
+      const tasks = ['1. Отчет заполнен', '2. ПК выключены', '3. Окна закрыты', '4. Свет выключен'];
+      const ids = ['e1', 'e2', 'e3', 'e4'];
+
+      itemsHtml = `
+        <div style="background:${theme.inner}; padding:12px 14px; border-radius:14px; margin-bottom:10px; box-shadow: inset 2px 2px 5px ${theme.shadowDark}, inset -2px -2px 5px ${theme.shadowLight};">
+          <div style="color:${theme.accent}; font-weight:800; font-size:11px; margin-bottom:4px; letter-spacing:0.5px;">АРЕНДА АВТОПАРКА:</div>
+          <div style="font-size:12px; margin-bottom:6px;">Заявок: <b>${rIn}</b> &nbsp;|&nbsp; Выдано авто: <b>${rDone}</b></div>
+          <div style="color:${theme.accent}; font-weight:800; font-size:11px; margin-bottom:4px; letter-spacing:0.5px;">ПОДКЛЮЧАШКА:</div>
+          <div style="font-size:12px;">Заявок: <b>${regIn}</b> &nbsp;|&nbsp; На линии: <b>${regDone}</b></div>
         </div>
-        <div style="background:${theme.cardBg}; padding:10px 12px; border-radius:10px; font-size:12px; line-height:1.7;">
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding-bottom:3px;">
-            <span>1. Отчет заполнен:</span> <b style="font-size:14px;">${getVal('e1')}</b>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
-            <span>2. ПК выключены:</span> <b style="font-size:14px;">${getVal('e2')}</b>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
-            <span>3. Окна закрыты:</span> <b style="font-size:14px;">${getVal('e3')}</b>
-          </div>
-          <div style="display:flex; justify-content:space-between; padding-top:3px;">
-            <span>4. Свет выключен:</span> <b style="font-size:14px;">${getVal('e4')}</b>
-          </div>
+      ` + tasks.map((t, idx) => `
+        <div style="background:${theme.inner}; padding:10px 14px; border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; box-shadow: inset 2px 2px 5px ${theme.shadowDark}, inset -2px -2px 5px ${theme.shadowLight};">
+          <span style="font-size:12px; font-weight:600; color:#e2e8f0;">${t}</span>
+          <span style="font-size:16px;">${getIconOnly(ids[idx])}</span>
         </div>
-      `;
+      `).join('');
     }
 
     const card = document.createElement('div');
-    card.style.width = '380px';
-    card.style.padding = '20px';
+    card.style.width = '390px';
+    card.style.padding = '24px';
     card.style.background = theme.bg;
     card.style.color = theme.text;
-    card.style.borderRadius = '16px';
+    card.style.borderRadius = '24px';
     card.style.boxSizing = 'border-box';
     card.style.fontFamily = 'Arial, sans-serif';
     card.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:10px;">
-        <span style="font-weight:900; font-size:18px; color:${theme.accent};">DRIVE TAXI</span>
-        <span style="font-size:11px; background:${theme.cardBg}; padding:4px 8px; border-radius:6px; font-weight:bold; text-transform:uppercase;">
-          ${shift === 'morning' ? '☀️ Утро' : '🌙 Вечер'}
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.15); padding-bottom:12px;">
+        <span style="font-weight:900; font-size:19px; color:${theme.accent}; letter-spacing:0.5px;">🚖 DRIVE TAXI</span>
+        <span style="font-size:11px; background:${theme.inner}; padding:5px 12px; border-radius:12px; font-weight:800; text-transform:uppercase; box-shadow: 2px 2px 5px ${theme.shadowDark};">
+          ${shift === 'morning' ? '☀️ УТРО' : '🌙 ВЕЧЕР'}
         </span>
       </div>
       
-      <div style="margin:12px 0; font-size:12px;">
-        <div>Сотрудник: <b style="font-size:15px; color:${theme.accent};">${emp}</b></div>
-        <div>Дата/Время: <b>${dateStr} в ${timeStr}</b></div>
-        <div style="margin-top:4px; font-size:10px; color:#cbd5e1; word-break:break-all;">
-          📍 Геолокация: <a style="color:${theme.accent}; text-decoration:underline;">${geoUrl}</a>
+      <div style="margin:14px 0 12px 0;">
+        <div style="font-size:13px; color:#cbd5e1;">Сотрудник: <b style="font-size:16px; color:#ffffff;">${emp}</b></div>
+        <div style="font-size:12px; color:#94a3b8; margin-top:2px;">Время сдачи: <b>${dateStr} в ${timeStr}</b></div>
+        <div style="margin-top:6px; font-size:10px; color:#cbd5e1; word-break:break-all;">
+          📍 Гео ПК: <a style="color:${theme.accent}; text-decoration:underline;">${geoUrl}</a>
         </div>
       </div>
 
-      ${bodyHtml}
+      ${itemsHtml}
 
-      <div style="margin-top:12px; text-align:right; font-size:10px; color:#94a3b8;">
-        Система операционного контроля смен
+      <div style="margin-top:14px; text-align:right; font-size:10px; color:#94a3b8; letter-spacing:0.5px;">
+        Операционный контроль смен
       </div>
     `;
 
@@ -461,7 +495,7 @@
         });
       } catch (e) {}
     } else {
-      alert('Зажмите готовое фото пальцем и выберите «Поделиться / Переслать в WhatsApp»');
+      alert('Зажмите фото пальцем и выберите «Поделиться / Переслать в WhatsApp»');
     }
   }
 </script>
