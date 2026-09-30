@@ -347,72 +347,25 @@
   const OFFICE_TAG = 'ОФИС DRIVE TAXI (ул. Елгина, 18)';
 
   let currentLocStatus = OFFICE_TAG;
+  let weatherEmoji = '☀️';
+  let weatherInfo = '+18°C';
 
-  // Полная база оптимистичных эмодзи по всем запрошенным категориям (без разбитых сердец)
-  const EMOJI_CATEGORIES = {
-    fruits_veggies: [
-      '🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝',
-      '🥑', '🍅', '🍆', '🥦', '🌽', '🥕', '🥒', '🥬', '🌶️', '🫑'
-    ],
-    nature_flowers: [
-      '🌸', '💮', '🏵️', '🌹', '🌺', '🌻', '🌼', '🌷', '🌱', '🪴', '🌲', '🌳', '🌴', '🌵', '🌾', '🌿', '☘️', '🍀', '🍁', '🍂', '🍃'
-    ],
-    clothes_shoes: [
-      '👟', '👞', '👠', '👡', '👢', '🥾', '🧢', '👒', '🎩', '🕶️', '👓', '👗', '👘', '🥻', '👝', '👛', '👜', '🎒', '🧳', '🧣', '🧤'
-    ],
-    food_drinks: [
-      '🥐', '🥯', '🍞', '🥖', '🥨', '🥞', '🧇', '🧀', '🍕', '🍔', '🍟', '🥪', '🌮', '🌯', '🥗', '🍝', '🍜', '🍣', '🍩', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '☕', '🍵', '🧃'
-    ],
-    games_music: [
-      '🎷', '🪗', '🎸', '🎹', '🎺', '🎻', '🪕', '🥁', '🪘', '🎧', '🎤', '🎨', '🎬', '🎯', '🎳', '🎮', '🎲', '🧩', '🪁'
-    ],
-    holidays_gifts: [
-      '🎁', '🎈', '🎉', '🎊', '🎀', '🪄', '✨', '⭐', '🌟', '💫', '🏆', '🥇', '👑', '💎', '🎇', '🎆'
-    ],
-    hearts: [
-      '❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🤍', '💖', '💗', '💓', '💞', '💕', '💘', '💝', '💟', '❣️', '🫶'
-    ]
-  };
-
-  // Все категории объединены в общий пул
-  const ALL_OPTIMISTIC_EMOJIS = [
-    ...EMOJI_CATEGORIES.fruits_veggies,
-    ...EMOJI_CATEGORIES.nature_flowers,
-    ...EMOJI_CATEGORIES.clothes_shoes,
-    ...EMOJI_CATEGORIES.food_drinks,
-    ...EMOJI_CATEGORIES.games_music,
-    ...EMOJI_CATEGORIES.holidays_gifts,
-    ...EMOJI_CATEGORIES.hearts
+  // База оптимистичных смайликов (фрукты, овощи, цветы, одежда, еда, музыка, подарки, целые сердца)
+  const OPTIMISTIC_POOL = [
+    '🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝',
+    '🥑', '🍅', '🍆', '🥦', '🌽', '🥕', '🥒', '🥬', '🌶️️', '🫑',
+    '🌸', '💮', '🏵️', '🌹', '🌺', '🌻', '🌼', '🌷', '🌱', '🪴', '🌲', '🌳', '🌴', '🌵', '🌾', '🌿', '☘️', '🍀', '🍁', '🍂', '🍃',
+    '👟', '👞', '👠', '👡', '👢', '🥾', '🧢', '👒', '🎩', '🕶️', '👓', '👗', '👘', '🥻', '👝', '👛', '👜', '🎒', '🧳', '🧣', '🧤',
+    '🥐', '🥯', '🍞', '🥖', '🥨', '🥞', '🧇', '🧀', '🍕', '🍔', '🍟', '🥪', '🌮', '🌯', '🥗', '🍝', '🍜', '🍣', '🍩', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '☕', '🍵', '🧃',
+    '🎷', '🪗', '🎸', '🎹', '🎺', '🎻', '🪕', '🥁', '🪘', '🎧', '🎤', '🎨', '🎬', '🎯', '🎳', '🎮', '🎲', '🧩', '🪁',
+    '🎁', '🎈', '🎉', '🎊', '🎀', '🪄', '✨', '⭐', '🌟', '💫', '🏆', '🥇', '👑', '💎', '🎇', '🎆',
+    '❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🤍', '💖', '💗', '💓', '💞', '💕', '💘', '💝', '💟', '❣️', '🫶'
   ];
 
-  // Генератор псевдослучайного числа на основе строки
-  function hashString(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = (hash << 5) - hash + str.charCodeAt(i);
-      hash |= 0;
-    }
-    return Math.abs(hash);
-  }
-
-  // Генератор ежедневной загадки: для каждого сотрудника и каждого дня генерируется свой уникальный сет
-  function getDailyMysteryEmoji(employeeName, dateStr, shiftMode) {
-    // Сид учитывает имя сотрудника, дату и смену, а также случайный фактор момента
-    const seedStr = `${employeeName}_${dateStr}_${shiftMode}_${new Date().getMinutes()}`;
-    let seed = hashString(seedStr);
-
-    const count = 4; // Выдаем красивый сет из 4 разных эмодзи
-    const selected = [];
-    const pool = [...ALL_OPTIMISTIC_EMOJIS];
-
-    for (let i = 0; i < count; i++) {
-      seed = (seed * 9301 + 49297) % 233280;
-      const rndIndex = seed % pool.length;
-      selected.push(pool[rndIndex]);
-      pool.splice(rndIndex, 1); // Без повторений внутри одной строки
-    }
-
-    return selected.join(' ');
+  // Возвращает ровно один случайный оптимистичный смайлик
+  function getRandomSingleEmoji() {
+    const idx = Math.floor(Math.random() * OPTIMISTIC_POOL.length);
+    return OPTIMISTIC_POOL[idx];
   }
 
   function refreshClock() {
@@ -421,6 +374,30 @@
   }
   setInterval(refreshClock, 1000);
   refreshClock();
+
+  // Запрос реальной погоды в Алматы с градусами
+  async function loadWeather() {
+    try {
+      const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.29&longitude=76.96&current_weather=true');
+      const data = await res.json();
+      if (data && data.current_weather) {
+        const temp = Math.round(data.current_weather.temperature);
+        const code = data.current_weather.weathercode;
+        weatherInfo = (temp > 0 ? `+${temp}` : `${temp}`) + '°C';
+
+        if (code === 0) weatherEmoji = '☀️';
+        else if ([1, 2, 3].includes(code)) weatherEmoji = '⛅';
+        else if ([45, 48].includes(code)) weatherEmoji = '🌫';
+        else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) weatherEmoji = '🌧';
+        else if ([71, 73, 75, 77, 85, 86].includes(code)) weatherEmoji = '❄️';
+        else if ([95, 96, 99].includes(code)) weatherEmoji = '⛈';
+      }
+    } catch (e) {
+      weatherEmoji = '☀️';
+      weatherInfo = '+18°C';
+    }
+  }
+  loadWeather();
 
   function calcDistanceKm(lat1, lon1, lat2, lon2) {
     const R = 6371;
@@ -492,15 +469,18 @@
     const timeOnly = now.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
     const dateFormatted = `${dateOnly} в ${timeOnly}`;
 
-    const shiftStatusLine = mode === 'morning' ? 'Смену открыла.' : 'Смену закрыла.';
     const greetingLine = mode === 'morning' ? 'Всем привет!' : 'Доброго вечера!';
-    const mysteryEmojiLine = getDailyMysteryEmoji(name, dateOnly, mode);
+    const singleEmoji = getRandomSingleEmoji();
+    const shiftPhrase = mode === 'morning' 
+      ? `Смену открыла ${singleEmoji}` 
+      : `Смену закрыла ${singleEmoji}`;
 
-    // 1-я строка: Смену открыла/закрыла
-    // 2-я строка: Локация
-    // 3-я строка: Отчет за дату + Приветствие
-    // 4-я строка: Уникальный набор оптимистичных эмодзи
-    textForWhatsApp = `${shiftStatusLine}\n${currentLocStatus}\nОтчет за ${dateOnly}. ${greetingLine}\n${mysteryEmojiLine}`;
+    // Структура текста строго по запросу:
+    // 1 строка: Локация
+    // 2 строка: Отчет за дату
+    // 3 строка: Приветствие с погодой и градусами
+    // 4 строка: Смену открыла/закрыла с ОДНИМ случайным смайликом
+    textForWhatsApp = `${currentLocStatus}\nОтчет за ${dateOnly}.\n${greetingLine} ${weatherEmoji} ${weatherInfo}\n${shiftPhrase}`;
 
     const badgeSuccess = `<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#10b981; color:#ffffff; font-size:12px; font-weight:800; flex-shrink:0;">✓</span>`;
     const badgeDanger  = `<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#ef4444; color:#ffffff; font-size:12px; font-weight:800; flex-shrink:0;">✕</span>`;
@@ -527,7 +507,7 @@
       const rIn = document.getElementById('rent-in').value || '0';
       const rOut = document.getElementById('rent-out').value || '0';
       const regIn = document.getElementById('reg-in').value || '0';
-      const regDone = document.getElementById('reg-out').value || '0';
+      const regOut = document.getElementById('reg-out').value || '0';
 
       const items = ['1. Отчет заполнен', '2. ПК выключены', '3. Окна закрыты', '4. Свет выключен'];
       const ids = ['e1', 'e2', 'e3', 'e4'];
@@ -547,7 +527,7 @@
       `).join('');
     }
 
-    // Фото-квитанция БЕЗ погодного блока
+    // Фото без погодного бейджа
     const card = document.createElement('div');
     card.style.position = 'fixed';
     card.style.left = '-9999px';
@@ -577,7 +557,7 @@
       ${contentHtml}
 
       <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#94a3b8; font-weight:600;">
-        <span>${shiftStatusLine}</span>
+        <span>${mode === 'morning' ? 'Смену открыла' : 'Смену закрыла'}</span>
         <span>Контроль смен Drive Taxi</span>
       </div>
     `;
