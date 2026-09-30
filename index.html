@@ -8,7 +8,6 @@
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; transition: all 0.2s ease; }
     
-    /* Неоморфизм: базовые цвета и мягкие объемные тени */
     body {
       background-color: #e0e5ec;
       margin: 0;
@@ -45,7 +44,6 @@
       color: #475569;
     }
 
-    /* Селекты и поля ввода вдавленного неоморфного стиля */
     .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #475569; }
     
@@ -61,7 +59,6 @@
       color: #1e293b;
     }
 
-    /* Карточки пунктов с кнопками Да / Нет */
     .neu-row {
       background: #e0e5ec;
       border-radius: 14px;
@@ -97,7 +94,6 @@
       box-shadow: inset 2px 2px 5px #b91c1c, inset -2px -2px 5px #f87171;
     }
 
-    /* Блок ввода аренды и подключашки */
     .section-title {
       font-size: 13px;
       font-weight: 800;
@@ -114,7 +110,6 @@
     }
     .num-card label { font-size: 11px; margin-bottom: 4px; }
 
-    /* Геолокация */
     .geo-box {
       margin-bottom: 14px;
       padding: 8px 12px;
@@ -138,7 +133,6 @@
       box-shadow: 2px 2px 4px #bec3c9, -2px -2px 4px #ffffff;
     }
 
-    /* Главные кнопки */
     .neu-btn-submit {
       width: 100%;
       padding: 14px;
@@ -191,7 +185,7 @@
     <button type="button" class="geo-btn" onclick="requestGeo()">Обновить гео</button>
   </div>
 
-  <!-- УТРЕННИЙ БЛОК (орфография исправлена) -->
+  <!-- УТРЕННИЙ БЛОК -->
   <div id="morning-block">
     <div class="neu-row">
       <div class="row-text">1. Мышка и гарнитура работают</div>
@@ -230,7 +224,7 @@
     </div>
   </div>
 
-  <!-- ВЕЧЕРНИЙ БЛОК (орфография исправлена) -->
+  <!-- ВЕЧЕРНИЙ БЛОК -->
   <div id="evening-block" style="display: none;">
     <div class="section-title">Аренда автопарка</div>
     <div class="num-grid">
@@ -295,11 +289,10 @@
 </div>
 
 <script>
-  // Индивидуальные цветовые схемы для карточки каждого сотрудника
   const EMP_PALETTES = {
-    'Айгуль': { bg: '#1e1b4b', cardBg: '#2e1065', accent: '#c084fc', text: '#ffffff' }, // Фиолетово-индиго
-    'Нурай':  { bg: '#064e3b', cardBg: '#065f46', accent: '#6ee7b7', text: '#ffffff' }, // Изумрудно-мятный
-    'Дина':   { bg: '#4c0519', cardBg: '#831843', accent: '#fda4af', text: '#ffffff' }  // Розово-коралловый
+    'Айгуль': { bg: '#1e1b4b', cardBg: '#2e1065', accent: '#c084fc', text: '#ffffff' },
+    'Нурай':  { bg: '#064e3b', cardBg: '#065f46', accent: '#6ee7b7', text: '#ffffff' },
+    'Дина':   { bg: '#4c0519', cardBg: '#831843', accent: '#fda4af', text: '#ffffff' }
   };
 
   let geoUrl = 'Координаты не переданы';
@@ -322,7 +315,7 @@
           document.getElementById('geo-status-text').innerText = `📍 Координаты: ${lat}, ${lon}`;
         },
         (err) => {
-          document.getElementById('geo-status-text').innerText = '⚠️ Гео отключено в браузере';
+          document.getElementById('geo-status-text').innerText = '⚠️️ Гео отключено в браузере';
         },
         { enableHighAccuracy: true, timeout: 6000 }
       );
@@ -336,9 +329,10 @@
     btn.classList.add(isYes ? 'active-yes' : 'active-no');
   }
 
+  // Возвращает ТОЛЬКО значок галочки или крестика (без слов ДА/НЕТ)
   function getVal(id) {
     const group = document.querySelector(`.toggle-group[data-id="${id}"]`);
-    return group.querySelector('.active-yes') ? '✅ ДА' : '❌ НЕТ';
+    return group.querySelector('.active-yes') ? '✅' : '❌';
   }
 
   function toggleShift() {
@@ -361,12 +355,22 @@
 
     if (shift === 'morning') {
       bodyHtml = `
-        <div style="background:${theme.cardBg}; padding:12px; border-radius:10px; font-size:12px; line-height:1.7;">
-          <div>1. Мышка и гарнитура: <b>${getVal('m1')}</b></div>
-          <div>2. AmoCRM свой аккаунт: <b>${getVal('m2')}</b></div>
-          <div>3. Sipuni своя линия: <b>${getVal('m3')}</b></div>
-          <div>4. Входящие/исходящие звонки: <b>${getVal('m4')}</b></div>
-          <div>5. Вчерашние заявки обработаны: <b>${getVal('m5')}</b></div>
+        <div style="background:${theme.cardBg}; padding:12px; border-radius:10px; font-size:12px; line-height:1.8;">
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding-bottom:3px;">
+            <span>1. Мышка и гарнитура:</span> <b style="font-size:14px;">${getVal('m1')}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
+            <span>2. AmoCRM свой аккаунт:</span> <b style="font-size:14px;">${getVal('m2')}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
+            <span>3. Sipuni своя линия:</span> <b style="font-size:14px;">${getVal('m3')}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
+            <span>4. Входящие/исходящие звонки:</span> <b style="font-size:14px;">${getVal('m4')}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding-top:3px;">
+            <span>5. Вчерашние заявки обработаны:</span> <b style="font-size:14px;">${getVal('m5')}</b>
+          </div>
         </div>
       `;
     } else {
@@ -382,11 +386,19 @@
           <div style="color:${theme.accent}; font-weight:bold; margin:6px 0 4px 0;">ПОДКЛЮЧАШКА:</div>
           <div>Поступило заявок: <b>${regIn}</b> | Вышли на линию: <b>${regDone}</b></div>
         </div>
-        <div style="background:${theme.cardBg}; padding:10px 12px; border-radius:10px; font-size:12px; line-height:1.6;">
-          <div>1. Отчет заполнен: <b>${getVal('e1')}</b></div>
-          <div>2. ПК выключены: <b>${getVal('e2')}</b></div>
-          <div>3. Окна закрыты: <b>${getVal('e3')}</b></div>
-          <div>4. Свет выключен: <b>${getVal('e4')}</b></div>
+        <div style="background:${theme.cardBg}; padding:10px 12px; border-radius:10px; font-size:12px; line-height:1.7;">
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding-bottom:3px;">
+            <span>1. Отчет заполнен:</span> <b style="font-size:14px;">${getVal('e1')}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
+            <span>2. ПК выключены:</span> <b style="font-size:14px;">${getVal('e2')}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.07); padding:3px 0;">
+            <span>3. Окна закрыты:</span> <b style="font-size:14px;">${getVal('e3')}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding-top:3px;">
+            <span>4. Свет выключен:</span> <b style="font-size:14px;">${getVal('e4')}</b>
+          </div>
         </div>
       `;
     }
@@ -403,7 +415,7 @@
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:10px;">
         <span style="font-weight:900; font-size:18px; color:${theme.accent};">DRIVE TAXI</span>
         <span style="font-size:11px; background:${theme.cardBg}; padding:4px 8px; border-radius:6px; font-weight:bold; text-transform:uppercase;">
-          ${shift === 'morning' ? '☀️️ Утро' : '🌙 Вечер'}
+          ${shift === 'morning' ? '☀️ Утро' : '🌙 Вечер'}
         </span>
       </div>
       
