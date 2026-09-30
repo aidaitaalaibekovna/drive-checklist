@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Drive Taxi — Сменный Чек-лист</title>
+  <!-- Подключение легковесной библиотеки рендеринга картинки -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f3f4f6; margin: 0; padding: 16px; color: #1f2937; }
+    .card { background: #ffffff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); max-width: 480px; margin: 0 auto; }
+    h2 { margin-top: 0; font-size: 20px; color: #111827; border-bottom: 2px solid #f3f4f6; padding-bottom: 10px; display: flex; justify-content: space-between; }
+    .badge { font-size: 12px; background: #e0e7ff; color: #4338ca; padding: 4px 8px; border-radius: 6px; font-weight: normal; }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #4b5563; }
+    input[type="text"], input[type="number"], select { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; outline: none; }
+    .checklist-item { display: flex; align-items: center; background: #f9fafb; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e5e7eb; cursor: pointer; }
+    .checklist-item input { margin-right: 12px; width: 18px; height: 18px; accent-color: #4f46e5; }
+    .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; margin-top: 12px; }
+    .btn-primary { background: #4f46e5; color: #ffffff; }
+    .btn-whatsapp { background: #25D366; color: #ffffff; display: none; }
+    /* Стиль готовой фото-квитанции */
+    #receipt-container { margin-top: 20px; display: none; text-align: center; }
+    #receipt-img { width: 100%; border-radius: 12px; border: 1px solid #d1d5db; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="card" id="checklist-form">
+  <h2>
+    Drive Taxi Контроль 
+    <span class="badge" id="current-date"></span>
+  </h2>
+
+  <div class="form-group">
+    <label>Сотрудник (Имя / Смена)</label>
+    <select id="emp-name">
+      <option value="">Выберите сотрудника...</option>
+      <option value="Ержан">Ержан</option>
+      <option value="Асель">Асель</option>
+      <option value="Айдай">Айдай</option>
+      <option value="Эльвира">Эльвира</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Тип отчета</label>
+    <select id="shift-type">
+      <option value="Утренняя смена (Прием)">☀️ Утренняя смена (Прием)</option>
+      <option value="Вечерняя смена (Сдача)">🌙 Вечерняя смена (Сдача)</option>
+    </select>
+  </div>
+
+  <label>Обязательные регламентные пункты</label>
+  <div class="checklist-item">
+    <input type="checkbox" id="c1">
+    <label for="c1" style="margin:0; cursor:pointer;">Рабочее место и гарнитура готовы</label>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox" id="c2">
+    <label for="c2" style="margin:0; cursor:pointer;">AmoCRM и Sipuni авторизованы</label>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox" id="c3">
+    <label for="c3" style="margin:0; cursor:pointer;">Очередь входящих чатов разобрана</label>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox" id="c4">
+    <label for="c4" style="margin:0; cursor:pointer;">Сложные сделки переданы по смене</label>
+  </div>
+
+  <!-- Динамические поля против формализма -->
+  <div class="form-group" style="margin-top: 14px;">
+    <label>Обработано заявок / звонков за смену</label>
+    <input type="number" id="leads-count" placeholder="Например, 42">
+  </div>
+
+  <button class="btn btn-primary" onclick="generateReceipt()">Сформировать квитанцию</button>
+</div>
+
+<!-- Блок предварительного просмотра квитанции и отправки -->
+<div id="receipt-container" class="card">
+  <h3 style="margin-top:0; font-size:16px;">Ваша квитанция готова</h3>
+  <img id="receipt-img" src="" alt="Квитанция смены">
+  <button class="btn btn-whatsapp" id="btn-share" onclick="shareToWhatsApp()">Поделиться в WhatsApp</button>
+</div>
+
+<script>
+  // Установка текущей даты
+  const now = new Date();
+  document.getElementById('current-date').innerText = now.toLocaleDateString('ru-RU');
+
+  let generatedFile = null;
+
+  function generateReceipt() {
+    const name = document.getElementById('emp-name').value;
+    const shift = document.getElementById('shift-type').value;
+    const leads = document.getElementById('leads-count').value || '0';
+
+    if (!name) {
+      alert('Пожалуйста, выберите имя сотрудника!');
+      return;
+    }
+
+    const c1 = document.getElementById('c1').checked ? '✅' : '❌';
+    const c2 = document.getElementById('c2').checked ? '✅' : '❌';
+    const c3 = document.getElementById('c3').checked ? '✅' : '❌';
+    const c4 = document.getElementById('c4').checked ? '✅' : '❌';
+
+    // Создание скрытого блока карточки для рендера в фото
+    const renderDiv = document.createElement('div');
+    renderDiv.style.width = '380px';
+    renderDiv.style.padding = '24px';
+    renderDiv.style.background = '#1e1b4b';
+    renderDiv.style.color = '#ffffff';
+    renderDiv.style.borderRadius = '16px';
+    renderDiv.style.boxSizing = 'border-box';
+    renderDiv.style.fontFamily = 'Arial, sans-serif';
+    renderDiv.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3730a3; padding-bottom:12px;">
+        <span style="font-weight:bold; font-size:18px; color:#a5b4fc;">DRIVE TAXI</span>
+        <span style="font-size:12px; background:#4338ca; padding:3px 8px; border-radius:4px;">ФИКСАЦИЯ СМЕНЫ</span>
+      </div>
+      <div style="margin:16px 0;">
+        <div style="font-size:14px; color:#c7d2fe;">Сотрудник: <b style="color:#ffffff;">${name}</b></div>
+        <div style="font-size:13px; color:#c7d2fe;">Период: ${shift}</div>
+        <div style="font-size:12px; color:#9ca3af; margin-top:4px;">Время: ${now.toLocaleDateString('ru-RU')} ${now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'})}</div>
+      </div>
+      <div style="background:#312e81; padding:12px; border-radius:8px; font-size:13px; line-height:1.6;">
+        <div>${c1} Рабочее место и гарнитура</div>
+        <div>${c2} Доступ AmoCRM и телефония</div>
+        <div>${c3} Очередь чатов без зависаний</div>
+        <div>${c4} Передача смены выполнена</div>
+      </div>
+      <div style="margin-top:14px; text-align:right; font-size:13px; color:#a5b4fc;">
+        Показатель за смену: <b style="font-size:16px; color:#38bdf8;">${leads}</b>
+      </div>
+    `;
+
+    document.body.appendChild(renderDiv);
+
+    // Превращение HTML в изображение
+    html2canvas(renderDiv, { scale: 2 }).then(canvas => {
+      document.body.removeChild(renderDiv);
+      const imgData = canvas.toDataURL('image/png');
+      document.getElementById('receipt-img').src = imgData;
+      document.getElementById('receipt-container').style.display = 'block';
+      document.getElementById('btn-share').style.display = 'block';
+
+      // Преобразование в Blob для мобильного Web Share API
+      canvas.toBlob(blob => {
+        generatedFile = new File([blob], `shift_${name}_${Date.now()}.png`, { type: 'image/png' });
+      }, 'image/png');
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    });
+  }
+
+  // Нативная отправка фото в WhatsApp
+  async function shareToWhatsApp() {
+    if (navigator.canShare && navigator.canShare({ files: [generatedFile] })) {
+      try {
+        await navigator.share({
+          files: [generatedFile],
+          title: 'Квитанция смены',
+          text: 'Смена зафиксирована в Drive Taxi'
+        });
+      } catch (err) {
+        console.log('Поделиться отменено пользователем');
+      }
+    } else {
+      // Запасной вариант для десктопа или старых телефонов
+      alert('Зажмите картинку пальцем и нажмите «Скопировать / Переслать в WhatsApp».');
+    }
+  }
+</script>
+
+</body>
+</html>
