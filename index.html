@@ -263,8 +263,15 @@
       </div>
     </div>
     <div class="task-item">
-      <span class="task-name">5. Вчерашние заявки до закрытия смены обработаны</span>
+      <span class="task-name">5. Wazzup сообщения доходят</span>
       <div class="switch-group" data-id="m5">
+        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+      </div>
+    </div>
+    <div class="task-item">
+      <span class="task-name">6. Кабинет проветрен и освещен, музыка включена</span>
+      <div class="switch-group" data-id="m6">
         <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
         <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
       </div>
@@ -298,29 +305,50 @@
     </div>
 
     <div class="task-item">
-      <span class="task-name">1. Отчет заполнен</span>
+      <span class="task-name">1. Заявки все обработаны</span>
       <div class="switch-group" data-id="e1">
         <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
         <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
-      <span class="task-name">2. ПК выключены</span>
+      <span class="task-name">2. Задачи выполнены</span>
       <div class="switch-group" data-id="e2">
         <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
         <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
-      <span class="task-name">3. Окна закрыты</span>
+      <span class="task-name">3. Отчет заполнен</span>
       <div class="switch-group" data-id="e3">
         <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
         <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
       </div>
     </div>
     <div class="task-item">
-      <span class="task-name">4. Свет выключен</span>
+      <span class="task-name">4. ПК отключен</span>
       <div class="switch-group" data-id="e4">
+        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+      </div>
+    </div>
+    <div class="task-item">
+      <span class="task-name">5. Окна закрыты</span>
+      <div class="switch-group" data-id="e5">
+        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+      </div>
+    </div>
+    <div class="task-item">
+      <span class="task-name">6. Свет выключен</span>
+      <div class="switch-group" data-id="e6">
+        <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
+        <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
+      </div>
+    </div>
+    <div class="task-item">
+      <span class="task-name">7. Сигнализация поставлена-дверь закрыта</span>
+      <div class="switch-group" data-id="e7">
         <button type="button" class="switch-btn active-yes" onclick="setSwitch(this, true)">Да</button>
         <button type="button" class="switch-btn" onclick="setSwitch(this, false)">Нет</button>
       </div>
@@ -350,10 +378,9 @@
   let weatherEmoji = '☀️';
   let weatherInfo = '+18°C';
 
-  // База оптимистичных смайликов (фрукты, овощи, цветы, одежда, еда, музыка, подарки, целые сердца)
   const OPTIMISTIC_POOL = [
     '🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝',
-    '🥑', '🍅', '🍆', '🥦', '🌽', '🥕', '🥒', '🥬', '🌶️️', '🫑',
+    '🥑', '🍅', '🍆', '🥦', '🌽', '🥕', '🥒', '🥬', '🌶', '🫑',
     '🌸', '💮', '🏵️', '🌹', '🌺', '🌻', '🌼', '🌷', '🌱', '🪴', '🌲', '🌳', '🌴', '🌵', '🌾', '🌿', '☘️', '🍀', '🍁', '🍂', '🍃',
     '👟', '👞', '👠', '👡', '👢', '🥾', '🧢', '👒', '🎩', '🕶️', '👓', '👗', '👘', '🥻', '👝', '👛', '👜', '🎒', '🧳', '🧣', '🧤',
     '🥐', '🥯', '🍞', '🥖', '🥨', '🥞', '🧇', '🧀', '🍕', '🍔', '🍟', '🥪', '🌮', '🌯', '🥗', '🍝', '🍜', '🍣', '🍩', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '☕', '🍵', '🧃',
@@ -362,7 +389,6 @@
     '❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🤍', '💖', '💗', '💓', '💞', '💕', '💘', '💝', '💟', '❣️', '🫶'
   ];
 
-  // Возвращает ровно один случайный оптимистичный смайлик
   function getRandomSingleEmoji() {
     const idx = Math.floor(Math.random() * OPTIMISTIC_POOL.length);
     return OPTIMISTIC_POOL[idx];
@@ -375,7 +401,6 @@
   setInterval(refreshClock, 1000);
   refreshClock();
 
-  // Запрос реальной погоды в Алматы с градусами
   async function loadWeather() {
     try {
       const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.29&longitude=76.96&current_weather=true');
@@ -448,7 +473,7 @@
 
   function getStatus(id) {
     const group = document.querySelector(`.switch-group[data-id="${id}"]`);
-    return group.querySelector('.active-yes') ? true : false;
+    return group ? (group.querySelector('.active-yes') ? true : false) : false;
   }
 
   function switchShift() {
@@ -475,11 +500,6 @@
       ? `Смену открыла ${singleEmoji}` 
       : `Смену закрыла ${singleEmoji}`;
 
-    // Структура текста строго по запросу:
-    // 1 строка: Локация
-    // 2 строка: Отчет за дату
-    // 3 строка: Приветствие с погодой и градусами
-    // 4 строка: Смену открыла/закрыла с ОДНИМ случайным смайликом
     textForWhatsApp = `${currentLocStatus}\nОтчет за ${dateOnly}.\n${greetingLine} ${weatherEmoji} ${weatherInfo}\n${shiftPhrase}`;
 
     const badgeSuccess = `<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#10b981; color:#ffffff; font-size:12px; font-weight:800; flex-shrink:0;">✓</span>`;
@@ -493,9 +513,10 @@
         '2. AmoCRM открыта, свой аккаунт',
         '3. Sipuni запущен, своя линия',
         '4. Входящие/исходящие звонки доступны',
-        '5. Вчерашние заявки обработаны'
+        '5. Wazzup сообщения доходят',
+        '6. Кабинет проветрен и освещен, музыка включена'
       ];
-      const ids = ['m1', 'm2', 'm3', 'm4', 'm5'];
+      const ids = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
 
       contentHtml = items.map((label, idx) => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:${theme.panel}; border:1px solid ${theme.border}; border-radius:12px; margin-bottom:8px; gap:12px;">
@@ -507,10 +528,18 @@
       const rIn = document.getElementById('rent-in').value || '0';
       const rOut = document.getElementById('rent-out').value || '0';
       const regIn = document.getElementById('reg-in').value || '0';
-      const regOut = document.getElementById('reg-out').value || '0';
+      const regDone = document.getElementById('reg-out').value || '0';
 
-      const items = ['1. Отчет заполнен', '2. ПК выключены', '3. Окна закрыты', '4. Свет выключен'];
-      const ids = ['e1', 'e2', 'e3', 'e4'];
+      const items = [
+        '1. Заявки все обработаны',
+        '2. Задачи выполнены',
+        '3. Отчет заполнен',
+        '4. ПК отключен',
+        '5. Окна закрыты',
+        '6. Свет выключен',
+        '7. Сигнализация поставлена-дверь закрыта'
+      ];
+      const ids = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7'];
 
       contentHtml = `
         <div style="background:${theme.panel}; border:1px solid ${theme.border}; border-radius:12px; padding:12px 14px; margin-bottom:10px;">
@@ -527,7 +556,6 @@
       `).join('');
     }
 
-    // Фото без погодного бейджа
     const card = document.createElement('div');
     card.style.position = 'fixed';
     card.style.left = '-9999px';
